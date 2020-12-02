@@ -1,97 +1,92 @@
-# deno
+# Deno
 
-|      **Linux & Mac**       |        **Windows**         |
-| :------------------------: | :------------------------: |
-| [![][tci badge]][tci link] | [![][avy badge]][avy link] |
+[![Build Status - Cirrus][]][Build status] [![Twitter handle][]][Twitter badge]
 
-## A secure TypeScript runtime built on V8
+<img align="right" src=https://deno.land/logo.svg height="150px">
 
-- Supports TypeScript out of the box. Uses a recent version of V8. That is, it's
-  very modern JavaScript.
+Deno is a _simple_, _modern_ and _secure_ runtime for **JavaScript** and
+**TypeScript** that uses V8 and is built in Rust.
 
-- No `package.json`. No npm. Not explicitly compatible with Node.
+### Features
 
-- Imports reference source code URLs only.
+- Secure by default. No file, network, or environment access, unless explicitly
+  enabled.
+- Supports TypeScript out of the box.
+- Ships only a single executable file.
+- Built-in utilities like a dependency inspector (deno info) and a code
+  formatter (deno fmt).
+- Set of reviewed standard modules that are guaranteed to work with
+  [Deno](https://deno.land/std/).
 
-  ```typescript
-  import { test } from "https://unpkg.com/deno_testing@0.0.5/testing.ts";
-  import { log } from "./util.ts";
-  ```
+### Install
 
-  Remote code is fetched and cached on first execution, and never updated until
-  the code is run with the `--reload` flag. (So, this will still work on an
-  airplane. See `~/.deno/src` for details on the cache.)
+Shell (Mac, Linux):
 
-- File system and network access can be controlled in order to run sandboxed
-  code. Defaults to read-only file system access and no network access. Access
-  between V8 (unprivileged) and Rust (privileged) is only done via serialized
-  messages defined in this
-  [flatbuffer](https://github.com/denoland/deno/blob/master/src/msg.fbs). This
-  makes it easy to audit. To enable write access explicitly use `--allow-write`
-  and `--allow-net` for network access.
-
-- Single executable:
-
-  ```
-  > ls -lh target/release/deno
-  -rwxr-xr-x  1 rld  staff    48M Aug  2 13:24 target/release/deno
-  > otool -L target/release/deno
-  target/release/deno:
-    /usr/lib/libSystem.B.dylib (compatibility version 1.0.0, current version 1252.50.4)
-    /usr/lib/libresolv.9.dylib (compatibility version 1.0.0, current version 1.0.0)
-    /System/Library/Frameworks/Security.framework/Versions/A/Security (compatibility version 1.0.0, current version 58286.51.6)
-    /usr/lib/libc++.1.dylib (compatibility version 1.0.0, current version 400.9.0)
-  >
-  ```
-
-- Always dies on uncaught errors.
-
-- [Aims to support top-level `await`.](https://github.com/denoland/deno/issues/471)
-
-- Aims to be browser compatible.
-
-## Install
-
-With Python:
-
-```
-curl -L https://deno.land/x/install/install.py | python
+```sh
+curl -fsSL https://deno.land/x/install/install.sh | sh
 ```
 
-With PowerShell:
+PowerShell (Windows):
 
 ```powershell
-iex (iwr https://deno.land/x/install/install.ps1)
+iwr https://deno.land/x/install/install.ps1 -useb | iex
 ```
 
-_Note: Depending on your security settings, you may have to run
-`Set-ExecutionPolicy RemoteSigned -Scope CurrentUser` first to allow downloaded
-scripts to be executed._
+[Homebrew](https://formulae.brew.sh/formula/deno) (Mac):
 
-With [Scoop](https://scoop.sh/):
-
-```
-scoop install deno
+```sh
+brew install deno
 ```
 
-Try it:
+[Chocolatey](https://chocolatey.org/packages/deno) (Windows):
 
+```powershell
+choco install deno
 ```
-> deno https://deno.land/thumb.ts
+
+Build and install from source using [Cargo](https://crates.io/crates/deno):
+
+```sh
+cargo install deno
 ```
 
-See also [deno_install](https://github.com/denoland/deno_install).
+See
+[deno_install](https://github.com/denoland/deno_install/blob/master/README.md)
+and [releases](https://github.com/denoland/deno/releases) for other options.
 
-## Status
+### Getting Started
 
-Under development.
+Try running a simple program:
 
-We make binary releases [here](https://github.com/denoland/deno/releases).
+```sh
+deno run https://deno.land/std/examples/welcome.ts
+```
 
-Docs are [here](https://github.com/denoland/deno/blob/master/Docs.md).
+Or a more complex one:
 
-<!-- prettier-ignore -->
-[avy badge]: https://ci.appveyor.com/api/projects/status/yel7wtcqwoy0to8x?branch=master&svg=true
-[avy link]: https://ci.appveyor.com/project/deno/deno
-[tci badge]: https://travis-ci.com/denoland/deno.svg?branch=master
-[tci link]: https://travis-ci.com/denoland/deno
+```ts
+import { serve } from "https://deno.land/std/http/server.ts";
+const s = serve({ port: 8000 });
+console.log("http://localhost:8000/");
+for await (const req of s) {
+  req.respond({ body: "Hello World\n" });
+}
+```
+
+You can find a more in depth introduction, examples, and environment setup
+guides in the [manual](https://deno.land/manual).
+
+More in-depth info can be found in the runtime
+[documentation](https://doc.deno.land).
+
+### Contributing
+
+We appreciate your help!
+
+To contribute, please read the our
+[guidelines](https://github.com/denoland/deno/blob/master/docs/contributing/style_guide.md).
+
+[Build Status - Cirrus]: https://github.com/denoland/deno/workflows/ci/badge.svg?branch=master&event=push
+[Build status]: https://github.com/denoland/deno/actions
+[Twitter badge]: https://twitter.com/intent/follow?screen_name=deno_land
+[Twitter handle]: https://img.shields.io/twitter/follow/deno_land.svg?style=social&label=Follow
